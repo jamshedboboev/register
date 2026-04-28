@@ -2,6 +2,7 @@ import psycopg
 
 from app.config import settings
 
+# fix: Попробовать перелопатить данные класс и сделать правильный "connection"
 
 class Database:
     async def connect(self):
