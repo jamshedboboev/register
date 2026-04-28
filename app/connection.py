@@ -1,22 +1,19 @@
 import psycopg
 
+from app.config import settings
+
 
 class Database:
-    def __init__(self, dbname, user, password, host, port):
-        self.dbname = dbname
-        self.user = user
-        self.password = password
-        self.host = host
-        self.port = port
+    def __init__(self) -> None:
         self.conn = None
 
     async def connect(self):
         self.conn = await psycopg.AsyncConnection.connect(
-            dbname=self.dbname,
-            user=self.user,
-            password=self.password,
-            host=self.host,
-            port=self.port,
+            dbname=settings.db_name,
+            user=settings.db_user,
+            password=settings.db_password,
+            host=settings.db_host,
+            port=settings.db_port,
             sslmode="require",
         )
 
@@ -43,10 +40,4 @@ class Database:
             return None
 
 
-db_con = Database(
-    dbname="neondb",
-    user="neondb_owner",
-    password="npg_vPM6qDx5RfIO",
-    host="ep-plain-king-aorf7r0j-pooler.c-2.ap-southeast-1.aws.neon.tech",
-    port=5432,
-)
+db_con = Database()
