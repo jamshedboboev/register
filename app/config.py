@@ -1,13 +1,12 @@
-from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    db_name: str = Field(alias="DB_NAME")
-    db_user: str = Field(alias="DB_USER")
-    db_password: str = Field(alias="DB_PASSWORD")
-    db_host: str = Field(alias="DB_HOST")
-    db_port: int = Field(alias="DB_PORT")
+    db_name: str
+    db_user: str
+    db_password: str
+    db_host: str
+    db_port: int
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -15,4 +14,4 @@ class Settings(BaseSettings):
     )
 
 
-settings = Settings()  # type: ignore
+settings = Settings()  # type: ignore значения подтягиваются SettingsConfigDict
