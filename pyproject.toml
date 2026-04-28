@@ -13,6 +13,7 @@ dependencies = [
     "pydantic[email] (>=2.13.3,<3.0.0)",
     "psycopg[binary] (>=3.3.3,<4.0.0)",
     "pydantic-settings (>=2.14.0,<3.0.0)",
+    "ruff (>=0.15.12,<0.16.0)",
 ]
 
 
