@@ -4,9 +4,6 @@ from app.config import settings
 
 
 class Database:
-    def __init__(self) -> None:
-        self.conn = None
-
     async def connect(self):
         self.conn = await psycopg.AsyncConnection.connect(
             dbname=settings.db_name,
@@ -22,7 +19,7 @@ class Database:
             await self.conn.close()
 
     async def execute(self, query, params=None):
-        async with self.conn.cursor() as cur:  # type: ignore
+        async with self.conn.cursor() as cur:
             await cur.execute(query, params)
 
             # если запрос возвращает данные (SELECT или RETURNING)
@@ -36,8 +33,7 @@ class Database:
                 return rows
 
             # если это INSERT/UPDATE/DELETE
-            await self.conn.commit()  # type: ignore
-            return None
+            await self.conn.commit()
 
 
 db_con = Database()
