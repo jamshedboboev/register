@@ -1,9 +1,11 @@
 from datetime import date
 from pydantic import Field, BaseModel, EmailStr, SecretStr
 
+
 class UserLogIn(BaseModel):
     login: str = Field(..., title="User login", min_length=4, max_length=40)
     password: SecretStr = Field(..., title="User password", min_length=8, max_length=20)
+
 
 class UserRegist(UserLogIn):
     name: str = Field(..., title="User name", min_length=1, max_length=40)
