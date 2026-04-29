@@ -1,6 +1,6 @@
 import psycopg
 
-from app.config import settings
+from app.core.config import settings
 
 # fix: Попробовать перелопатить данные класс и сделать правильный "connection"
 
