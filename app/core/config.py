@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+# fix: Реализовать правильный способ получения значний из environment
 
 class Settings(BaseSettings):
     db_name: str
