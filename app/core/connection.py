@@ -1,6 +1,7 @@
 import psycopg
+from psycopg.rows import dict_row
 
-from app.config import settings
+from app.core.config import settings
 
 # fix: Попробовать перелопатить данные класс и сделать правильный "connection"
 
@@ -13,6 +14,7 @@ class Database:
             host=settings.db_host,
             port=settings.db_port,
             sslmode="require",
+            row_factory=dict_row  # type: ignore
         )
 
     async def close(self):
