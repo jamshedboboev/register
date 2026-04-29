@@ -4,7 +4,7 @@ import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.connection import db_con
+from app.core.connection import db_con
 from app.routers import users
 
 # fix: В целом разобраться как можно строить асинхронные main файлы

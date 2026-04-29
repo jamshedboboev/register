@@ -1,4 +1,5 @@
 import psycopg
+from psycopg.rows import dict_row
 
 from app.core.config import settings
 
@@ -13,6 +14,7 @@ class Database:
             host=settings.db_host,
             port=settings.db_port,
             sslmode="require",
+            row_factory=dict_row  # type: ignore
         )
 
     async def close(self):
