@@ -12,7 +12,7 @@ class Database:
             password=settings.db_password,
             host=settings.db_host,
             port=settings.db_port,
-            sslmode="disable",
+            sslmode="require",
         )
 
     async def close(self):
