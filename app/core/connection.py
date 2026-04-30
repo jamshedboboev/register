@@ -13,7 +13,7 @@ class Database:
             password=settings.db_password,
             host=settings.db_host,
             port=settings.db_port,
-            sslmode="require",
+            sslmode="disable",
             row_factory=dict_row  # type: ignore
         )
 

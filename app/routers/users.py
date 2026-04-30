@@ -1,10 +1,11 @@
 import bcrypt
-from fastapi import APIRouter
+from fastapi import APIRouter , HTTPException
 
 from app.core.connection import db_con
 
 from app.models import UserRegist , UserLogIn
 from app.security import get_hashed_pass
+from app.routers.validate import check_user, check_password
 
 
 router = APIRouter(tags=["Users"])
@@ -24,14 +25,9 @@ async def get_user():
 @router.post("/users/register")
 async def register_user(user: UserRegist):
     # fix: проверку на наличие совпадений в БД переместить в файл validate.py
-    query = """
-    SELECT id, login, email
-    FROM users
-    WHERE login = %s and email = %s
-    """
-    r = await db_con.execute(query, (user.login, user.email))
+    r = await check_user(user.login, user.email)
     if r:
-        return {"message": "User already exists"}
+        return {"message": "User with this login and email already exists"}
 
     # fix: добавление пользователя в БД переместить в файл связанный с update-ами
     query = """
@@ -64,13 +60,10 @@ async def login_user(user: UserLogIn):
 
     # fix: Доработать данное условие и добавить логиврование и обработку ошибок
     if not r:
-        raise Exception()
+        raise HTTPException(status_code=404, detail="User not found")
     
     # fix: Проверку соответствия пароля переместить в файл validate.py
-    password_check: bool = bcrypt.checkpw(
-        user.password.get_secret_value().encode("utf-8"),
-        r["password_hash"].encode("utf-8") # type: ignore | fix: Добавить в возврат функции execute аннотацию типов
-    )
+    password_check = check_password(r["password_hash"], user.password.get_secret_value())
 
     if password_check:
         return {"message": "Login successful"}
