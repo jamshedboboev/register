@@ -3,16 +3,16 @@ from psycopg.rows import dict_row
 
 from app.core.config import settings
 
-# fix: Попробовать перелопатить данные класс и сделать правильный "connection"
+# fix: Попробовать перелопатить данный класс и сделать правильный "connection"
 
 class Database:
     async def connect(self):
         self.conn = await psycopg.AsyncConnection.connect(
-            dbname=settings.db_name,
-            user=settings.db_user,
-            password=settings.db_password,
-            host=settings.db_host,
-            port=settings.db_port,
+            dbname=settings.db.db_name,
+            user=settings.db.db_user,
+            password=settings.db.db_password,
+            host=settings.db.db_host,
+            port=settings.db.db_port,
             sslmode="require",
             row_factory=dict_row  # type: ignore
         )
