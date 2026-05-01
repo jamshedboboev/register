@@ -1,10 +1,9 @@
-import bcrypt
 from fastapi import APIRouter
 
 from app.core.connection import db_con
 
 from app.models import UserRegist , UserLogIn
-from app.security import get_hashed_pass
+from app.auth.security import get_hashed_pass, check_hash_pass
 
 
 router = APIRouter(tags=["Users"])
@@ -33,13 +32,13 @@ async def register_user(user: UserRegist):
     if r:
         return {"message": "User already exists"}
 
+    hashed_pass = get_hashed_pass(user.password.get_secret_value())
+
     # fix: добавление пользователя в БД переместить в файл связанный с update-ами
     query = """
     INSERT INTO users (login, password_hash, name, surname, birthdate, email)
     VALUES (%(login)s, %(password)s, %(name)s, %(surname)s, %(birthdate)s, %(email)s)
     """
-
-    hashed_pass = get_hashed_pass(user.password.get_secret_value())
 
     await db_con.execute(query, {
         "login": user.login,
@@ -66,11 +65,7 @@ async def login_user(user: UserLogIn):
     if not r:
         raise Exception()
     
-    # fix: Проверку соответствия пароля переместить в файл validate.py
-    password_check: bool = bcrypt.checkpw(
-        user.password.get_secret_value().encode("utf-8"),
-        r["password_hash"].encode("utf-8") # type: ignore | fix: Добавить в возврат функции execute аннотацию типов
-    )
+    password_check = check_hash_pass(user.password, r["password_hash"])  # type: ignore | Разобраться с типизацией
 
     if password_check:
         return {"message": "Login successful"}
